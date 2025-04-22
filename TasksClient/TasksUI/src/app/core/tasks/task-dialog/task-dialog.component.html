@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Edit Task' : 'Add New Task' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="taskForm" class="task-form">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Enter task Title" required>
+      <mat-error *ngIf="title?.invalid && (title?.dirty || title?.touched)">
+        <span *ngIf="title?.errors?.['required']">Title is required.</span>
+        <span *ngIf="title?.errors?.['minlength']">Title must be at least 3 characters.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Enter task description" required></textarea>
+      <mat-error *ngIf="description?.invalid && (description?.dirty || description?.touched)">
+        <span *ngIf="description?.errors?.['required']">Description is required.</span>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Due Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dueDate" required>
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+       <mat-error *ngIf="dueDate?.invalid && (dueDate?.dirty || dueDate?.touched)">
+        <span *ngIf="dueDate?.errors?.['required']">Due date is required.</span>
+      </mat-error>
+    </mat-form-field>
+
+     <mat-checkbox formControlName="isCompleted" *ngIf="isEditMode" class="task-completed-checkbox">
+       Mark as Completed
+     </mat-checkbox>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="taskForm.invalid">
+    {{ isEditMode ? 'Update' : 'Save' }}
+  </button>
+</mat-dialog-actions>
